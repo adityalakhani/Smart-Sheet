@@ -763,6 +763,56 @@ Generate questions that will help determine the candidate's true Excel capabilit
         except Exception as e:
             logger.error(f"Error getting current question dataset: {str(e)}")
             return {"success": False, "error": str(e)}
+        
+    def provide_hint(self, hint_level: str) -> Dict[str, Any]:
+        """Provide a hint for the current question using the Interviewer Agent."""
+        try:
+            if self.interview_state != "in_progress" or self.current_question_index >= len(self.current_questions):
+                return {"success": False, "error": "No active question to provide a hint for."}
+            
+            # Get a hint from the interviewer agent
+            hint_result = self.interviewer_agent.provide_hint(hint_level)
+            
+            return hint_result
+
+        except Exception as e:
+            logger.error(f"Error providing hint: {str(e)}")
+            return {"success": False, "error": str(e)}
+    
+    def _calculate_adaptive_performance_metrics(self) -> Dict[str, Any]:
+        """Calculate detailed adaptive performance metrics from the assessment results."""
+        if not self.assessment_results:
+            return {}
+
+        total_questions = len(self.assessment_results)
+        scores = [res["evaluation"]["score"] for res in self.assessment_results if "score" in res.get("evaluation", {})]
+        average_score = sum(scores) / len(scores) if scores else 0
+
+        # Analyze performance trend
+        trend = "stable"
+        if len(scores) > 3:
+            # Compare the average of the first half of scores to the second half
+            first_half_avg = sum(scores[:len(scores)//2]) / len(scores[:len(scores)//2])
+            second_half_avg = sum(scores[len(scores)//2:]) / len(scores[len(scores)//2:])
+            if second_half_avg > first_half_avg + 10:
+                trend = "improving"
+            elif second_half_avg < first_half_avg - 10:
+                trend = "declining"
+        
+        # Track how the candidate's profile evolved during the assessment
+        profile_evolution = {
+            "strengths_identified": len(self.candidate_profile.get("strengths", [])),
+            "areas_improved": 0,
+            "final_difficulty_level": self.candidate_profile.get("preferred_difficulty", "Medium")
+        }
+
+        return {
+            "total_questions": total_questions,
+            "average_score": round(average_score, 2),
+            "performance_trend": trend,
+            "candidate_profile_evolution": profile_evolution,
+            "skills_assessed": list(self.excel_skills_tested)
+        }
     
     def get_progress(self) -> Dict[str, Any]:
         """Get adaptive assessment progress"""

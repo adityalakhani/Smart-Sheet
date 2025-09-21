@@ -40,6 +40,8 @@ def initialize_session_state():
         st.session_state.excel_skill_focus = []
     if "current_dataset" not in st.session_state:
         st.session_state.current_dataset = None
+    if "confirming_reset" not in st.session_state:
+        st.session_state.confirming_reset = False
 
 def display_header():
     """Display adaptive header"""
@@ -176,9 +178,20 @@ def display_sidebar():
                     provide_methodology_hint()
             
             with col2:
-                if st.button("Reset", type="secondary"):
-                    if st.button("Confirm Reset", type="secondary"):
+                # Check if we are in the confirmation state for resetting
+                if st.session_state.get('confirming_reset', False):
+                    # Show Confirm and Cancel buttons
+                    if st.button("Confirm Reset", type="primary"):
+                        st.session_state.confirming_reset = False
                         reset_assessment()
+                    if st.button("Cancel"):
+                        st.session_state.confirming_reset = False
+                        st.rerun()
+                else:
+                    # Show the initial Reset button
+                    if st.button("Reset", type="secondary"):
+                        st.session_state.confirming_reset = True
+                        st.rerun()
         
         # System information
         st.markdown("---")

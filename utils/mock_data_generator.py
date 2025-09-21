@@ -98,6 +98,7 @@ Design a dataset structure that:
 3. Includes realistic business data relevant to the scenario
 4. Has some data quality issues that make the Excel challenge meaningful
 5. Is sized appropriately for the skill being tested
+6. Has only 10-20 rows
 
 Respond in JSON format:
 {{
