@@ -1,6 +1,8 @@
 # Smart-Sheet
 An AI-powered, response-driven interview system that dynamically evaluates Microsoft Excel proficiency through case-based scenarios and adaptive questioning.
 
+Access the POC on -> https://smart-sheetgit-luwj9uxtvsksqrmd54hwsj.streamlit.app/
+
 ## Overview
 
 This system revolutionizes Excel skills assessment by generating questions in real-time based on candidate responses, creating personalized learning paths and providing contextually relevant datasets for each scenario. Unlike traditional fixed-sequence assessments, this platform adapts to individual performance levels and focuses on areas that need the most attention.
@@ -213,7 +215,7 @@ google-genai>=1.38.0
 ### Local Development
 ```bash
 # Clone repository
-git clone [https://github.com/adityalakhani/Smart-Sheet](https://github.com/adityalakhani/Smart-Sheet)
+git clone https://github.com/adityalakhani/Smart-Sheet
 
 # Install dependencies
 pip install -r requirements.txt
