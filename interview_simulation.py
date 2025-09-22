@@ -353,7 +353,7 @@ Adaptive decisions made: {progress_data.get('trajectory_decisions', 0)}"""
             if first_question.get("dataset_info", {}).get("generated_successfully"):
                 self.log_dataset_info(first_question, first_question["dataset_info"])
             
-            time.sleep(60)  # Realistic delay
+            time.sleep(61)  # Realistic delay
             
             # Step 2: Assessment loop
             question_count = 1
@@ -378,7 +378,7 @@ Adaptive decisions made: {progress_data.get('trajectory_decisions', 0)}"""
                     "response_to_dataset": has_dataset
                 })
                 
-                time.sleep(60)
+                time.sleep(61)
                 
                 # Process response through orchestrator
                 process_result = self.orchestrator.process_response(candidate_response)
@@ -426,7 +426,7 @@ Adaptive decisions made: {progress_data.get('trajectory_decisions', 0)}"""
                 updated_progress = self.orchestrator.get_progress()
                 self.log_profile_evolution(updated_progress)
                 
-                time.sleep(60)
+                time.sleep(61)
                 
                 # Safety check
                 if question_count > self.candidate_details["max_questions"] + 2:
